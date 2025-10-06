@@ -1,0 +1,62 @@
+name: ESP-IDF Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Checkout repo
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2️⃣ Cache ESP-IDF tools & dependencies
+      - name: Cache ESP-IDF tools
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.espressif
+            ~/esp/esp-idf
+          key: ${{ runner.os }}-esp-idf-v4.4.7
+
+      # 3️⃣ Install dependencies
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git wget flex bison gperf python3 python3-pip cmake ninja-build ccache libffi-dev libssl-dev dfu-util libusb-1.0-0
+
+      # 4️⃣ Clone ESP-IDF v4.4.7 if not cached
+      - name: Setup ESP-IDF
+        run: |
+          if [ ! -d "$HOME/esp/esp-idf" ]; then
+            mkdir -p ~/esp
+            cd ~/esp
+            git clone -b v4.4.7 --recursive https://github.com/espressif/esp-idf.git
+          fi
+          cd ~/esp/esp-idf
+          ./install.sh
+          . ./export.sh
+
+      # 5️⃣ Set target (optional, tukar kalau pakai ESP32-S3)
+      - name: Set ESP32 target
+        run: |
+          . ~/esp/esp-idf/export.sh
+          idf.py set-target esp32
+
+      # 6️⃣ Build project
+      - name: Build firmware
+        run: |
+          . ~/esp/esp-idf/export.sh
+          idf.py build
+
+      # 7️⃣ Upload hasil build ke GitHub (boleh download .bin)
+      - name: Upload firmware artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: esp32-firmware
+          path: build/*.bin

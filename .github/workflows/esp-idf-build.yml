@@ -15,7 +15,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          submodules: recursive
+          submodules: false
 
       # 2️⃣ Cache ESP-IDF tools supaya build laju
       - name: Cache ESP-IDF tools

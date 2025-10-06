@@ -11,11 +11,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout repo
+      # 1️⃣ Checkout repo termasuk semua submodule (LVGL, drivers, dll)
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
-      # 2️⃣ Cache ESP-IDF tools & dependencies
+      # 2️⃣ Cache ESP-IDF tools supaya build laju
       - name: Cache ESP-IDF tools
         uses: actions/cache@v3
         with:
@@ -23,14 +25,16 @@ jobs:
             ~/.espressif
             ~/esp/esp-idf
           key: ${{ runner.os }}-esp-idf-v4.4.7
+          restore-keys: |
+            ${{ runner.os }}-esp-idf-
 
-      # 3️⃣ Install dependencies
+      # 3️⃣ Install dependencies (Ubuntu tools)
       - name: Install dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y git wget flex bison gperf python3 python3-pip cmake ninja-build ccache libffi-dev libssl-dev dfu-util libusb-1.0-0
 
-      # 4️⃣ Clone ESP-IDF v4.4.7 if not cached
+      # 4️⃣ Setup ESP-IDF v4.4.7
       - name: Setup ESP-IDF
         run: |
           if [ ! -d "$HOME/esp/esp-idf" ]; then
@@ -42,21 +46,24 @@ jobs:
           ./install.sh
           . ./export.sh
 
-      # 5️⃣ Set target (optional, tukar kalau pakai ESP32-S3)
+      # 5️⃣ Set target (ubah kalau guna esp32s3)
       - name: Set ESP32 target
         run: |
           . ~/esp/esp-idf/export.sh
           idf.py set-target esp32
 
-      # 6️⃣ Build project
+      # 6️⃣ Build firmware (akan detect semua komponen dalam components/)
       - name: Build firmware
         run: |
           . ~/esp/esp-idf/export.sh
           idf.py build
 
-      # 7️⃣ Upload hasil build ke GitHub (boleh download .bin)
+      # 7️⃣ Upload hasil build (.bin, .elf, .map)
       - name: Upload firmware artifact
         uses: actions/upload-artifact@v4
         with:
           name: esp32-firmware
-          path: build/*.bin
+          path: |
+            build/*.bin
+            build/*.elf
+            build/*.map

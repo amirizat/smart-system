@@ -1,0 +1,228 @@
+#ifndef APP_H_
+#define APP_H_
+
+#include "table.h"
+#include "target.h"
+
+typedef T8U	MENUID;
+
+// Menu Control
+#define MENUID_IDLE					0
+#define MENUID_MENU					1
+#define MENUID_VIEWMOOP				2
+#define MENUID_VIEWFIXOP			3
+#define MENUID_LASTCLAIM			4
+#define MENUID_MESSAGE				5
+#define MENUID_READCARD				6
+#define MENUID_VIEWTERMINFO			7
+#define MENUID_LOSTTIME				8
+#define MENUID_TAGOPIN				9
+#define MENUID_ASSIGNMOOP			10
+#define MENUID_ASSIGNFIXOP			11
+#define MENUID_PARTIALCTRL			12
+#define MENUID_PARTIALMODE			13
+#define MENUID_SET_ASSET			14
+#define MENUID_MODIFYQTY			15
+#define MENUID_TRANSFERWIP			16
+#define MENUID_CLEAREMPIN			17
+#define MENUID_FORCELOGOUT			18
+#define MENUID_GROUPTAG				19
+#define MENUID_SPLIT				20
+#define MENUID_CHECKUNFINISH		21
+#define MENUID_SOSCALL				22
+#define MENUID_SOSANSWER			23
+#define MENUID_SOSTECH_PICKUP		24
+#define MENUID_SOSTECH_REPLY		25
+#define MENUID_SOSTECH_ASSESS		26		//always last
+
+//menu split
+#define MENUID_SPLITHF				50
+#define MENUID_SPLITHFTOUHF			51
+
+////menu GT -> group tag
+//#define MENUID_GT_NEW				51
+//#define MENUID_GT_ADDBUNDLE		52
+//#define MENUID_GT_DELBUNDLE		53
+//#define MENUID_GT_CHANGEGT		54
+
+//menu udf
+#define MENUID_UDF0					61
+#define MENUID_UDF1					62
+#define MENUID_UDF2					63
+
+#define MENUID_USERACK				68
+#define MENUID_TELLUSER				69
+#define MENUID_CLAIMTAG_OPVALID		70
+#define MENUID_CLAIMTAG				71
+#define MENUID_WRITEEMPCARD			72
+#define MENUID_ASSIGNMENT			73
+//#define MENUID_UPDATE				73
+//#define MENUID_RELOAD				74
+#define MENUID_CLOCKINMENU			75
+#define MENUID_CLOCKIN				76
+#define MENUID_CLOCKOUT				77
+#define MENUID_TIMEOFF				78
+#define MENUID_CLAIMGROUPTAG		79
+
+// Memory checking
+#define MASTERID_MEMCHECKING		99
+
+// Master Control
+#define MASTERID_EXIT				100
+#define MASTERID_IDLE				101
+
+// Project Personnel Menu
+#define MASTERID_TERMINFO				102
+#define MASTERID_SETWIFI				103
+#define MASTERID_SETWIFIESPNOW			104
+#define MASTERID_CHANGEADDR				105
+#define MASTERID_SETSERVERIP			106
+#define MASTERID_RESETWIFI				107
+#define MASTERID_LINKMOBILEAPPS			108
+#define MASTERID_TERMDIAGNOSTIC			109
+#define MASTERID_RESET					110
+#define MASTERID_SETMEMORYFULL			111
+#define MASTERID_EMPINOUT				112
+#define MASTERID_MOCONFIRMATION			113
+#define MASTERID_LINEPRODUCTION			114
+#define MASTERID_RECYCLETAG				115
+#define MASTERID_AUTOLOGOUT				116
+#define MASTERID_CALLHELP				117
+#define MASTERID_GROUPOPSTRICT			118
+#define MASTERID_TECHSERVCODE			119
+#define MASTERID_DELAY10S				120
+//#define MASTERID_NOTIFYERROR			118
+#define MASTERID_MODICLAIM				121
+#define MASTERID_BYPASS_SV				122
+#define MASTERID_READTAG_SERVER			123
+#define MASTERID_OPVALIDATION			124
+#define MASTERID_SPLIT					125
+#define MASTERID_STRICTMO				126
+#define MASTERID_ASSETCHECK				127
+#define MASTERID_SETPROCESSSTAGE		128
+#define MASTERID_SETUHFRFIDPOWER		129		//always 4th last
+//#define MASTERID_INVERTSCREEN			120
+#define MASTERID_ROTATESCREEN			130		//always 3rd last
+#define MASTERID_CHANGEFIRMWARETYPE		131		//always 2nd last
+#define MASTERID_UPDATEFIRMWARE			132		//always last
+
+#define MASTERID_CONFIRMSETWIFI			140
+
+#define MASTERID_KICKOUT			150
+#define MASTERID_TIMERAUTOLOGOUT	151
+
+#define MAX_MASTERMENU		(MASTERID_UPDATEFIRMWARE - MASTERID_IDLE)
+#define MAX_MENUITEM_COUNT	(MENUID_SOSTECH_ASSESS + 1)
+#define MAX_UDF_COUNT		3
+#define LOC_SECURITY		61
+
+#define NOWHERE			0
+#define CALLBACK100		1
+
+#define UDFID_SOSCALL				11
+#define UDFID_SOSANS_LOSTTIME		12
+#define UDFID_SOSANS_CALL_TECH		16
+#define UDFID_SOSANS_TECH_PICKUP	20
+#define UDFID_SOSANS_TECH_REPLY		24
+#define UDFID_SOSANS_SV_ASSESS_NG	32
+#define UDFID_SOSANS_SV_ASSESS_OK	64
+#define UDFID_SOSANS_FALSE			19
+
+//Idle state
+//#define SHOW_IDLE_SCREEN		0x00
+//#define SHOW_NOTHING			0x01
+//#define SHOW_MEMORY_FULL		0x02
+//#define SHOW_ANTENNA_OFF		0x04
+//#define SHOW_NOT_IN_USE			0x08
+//#define SHOW_LOSTTIME_CH		0x10	//CH call help
+//#define SHOW_LOSTTIME_CH2		0x20
+//#define SHOW_MSG_MONITOTRING	0x40
+//#define SHOW_MSG_MONITOTRING	0x80
+
+#define SPLIT_STATE_INIT						0
+#define SPLIT_STATE_GETPREFIX 					1
+#define SPLIT_STATE_WAITGETPREFIX 				2
+#define SPLIT_STATE_CHECKPREVIOUS				3
+#define SPLIT_STATE_PRE_GETMOTHERINFO			4
+#define SPLIT_STATE_GETMOTHERINFO           	5
+#define SPLIT_STATE_CHECKSEVER					6
+#define SPLIT_STATE_WAITCHECKSEVER				7
+#define SPLIT_STATE_WRITEMOTHER1				8
+#define SPLIT_STATE_WAITWRITEMOTHER1			9
+#define SPLIT_STATE_PRE_DETECTCHILD_OR_MOTHER	10
+#define SPLIT_STATE_DETECTCHILD_OR_MOTHER		11
+#define SPLIT_STATE_PRE_DETECTMOTHER           	12
+#define SPLIT_STATE_DETECTMOTHER               	13
+#define SPLIT_STATE_PREPARE_MOTHERINFO      	14
+#define SPLIT_STATE_WAITWRITEMOTHER2			15
+#define SPLIT_STATE_GENERATE_MOTHEREND			16
+#define SPLIT_STATE_PREPARE_CHILDINFO       	17
+#define SPLIT_STATE_REGISTERUHFTAG	        	18
+#define SPLIT_STATE_WAITREGISTERUHFTAG          19
+#define SPLIT_STATE_PREPAREOPTION				20
+#define SPLIT_STATE_SELECTOPTION                21
+#define SPLIT_STATE_AUTORIZE					22
+#define SPLIT_STATE_CHANGESPLITQTY          	23
+#define SPLIT_STATE_RESET                   	24
+#define SPLIT_STATE_CLAIMCHILDTAG           	25
+#define SPLIT_STATE_WAITWRITETOCHILD			26
+#define SPLIT_STATE_GENERATE_CHILDRECORD		27
+#define SPLIT_CHECK_AUTHORIZATION				28
+#define SPLIT_STATE_EXIT						29
+#define SPLIT_STATE_WAITBUTTON					30
+#define SPLIT_STATE_PRESKIP						31
+#define SPLIT_STATE_SKIP						32
+#define SPLIT_STATE_RETRY						33
+
+//claim_from variable
+#define NORMAL				0
+//#define INSIDE_QCLOG		1
+//#define QCLOG_CHECK		2
+//#define QCLOG_PASS		3
+//#define PREVOP_FAIL		4
+#define MODIFY_QTY			5
+//#define ROVING_QC			6
+//#define ROVING_QC_2ND		7
+//#define SUBMIT_QC			8
+//#define SUBMIT_QC_2ND		9
+#define SPLIT				10
+
+extern MENUID menuid;
+extern T8U message[];
+extern T32U CP_Qty;
+extern T8U reclaimmsg[];
+extern T8U flag_scanfrom;
+extern T8U flag_canclaim;
+extern T8U EXTERNAL_MSG;
+extern T8U IsHotMessage;
+extern T8U claim_from ;
+extern T8U SPLIT_STATE;
+extern T8U HFTOUHF_STATE;
+extern T8U writeempcard_state;
+//extern T16U ToBeClaimOP[20];
+//extern T8U ToBeClaimRatio[20];
+
+#pragma pack(1)
+typedef struct MONITORING
+{
+	T8U flag_monitoring_receive;
+	T8U type;
+	T16U actual;
+	T16U target;
+}MONITORING;
+#pragma pack()
+
+
+void APP_Mgr(void);
+void MASTER_Mgr(void);
+//void add_MO(TBL_MOASSIGN tbl_moassign, T8U slot);
+void add_MO(TBL_MOOP_ASSIGN tbl_moopassign, T8U * replaceMO);
+void del_MO(T8U *MO);
+T8U check_time(DATETIME *start, DATETIME *end, T8U checkDiffDay);
+T8U connectionOK(T8U showError);
+extern T8U MenuIdle_State;
+T8U MatchID();
+T8U Chck_Line_Prod();
+T8U ASSET_VALIDATION();
+
+#endif /* APP_H_ */
